@@ -108,9 +108,10 @@ def extract_matches_link(browser, url):
 
 
 def extract_match_stats(browser, url) :
+    time.sleep(3)
     page = browser.new_page()
     page.goto(url)
-    time.sleep(5)
+    
     
     # accept cookies
     try : 
@@ -121,57 +122,64 @@ def extract_match_stats(browser, url) :
         logging.error(f"Accept cookies button doesn't exist : {e}")
         pass
     
-
-    # player name :
-    player_1 = page.locator('div.player-team > div.names > div.name > a').text_content()
-    player_2 = page.locator('div.opponent-team > div.names > div.name > a').text_content()
-    country_p1 = page.locator('div.player-team > div.names > div.name > span.country').text_content()
-    country_p2 = page.locator('div.opponent-team > div.names > div.name > span.country').text_content()
-
     
-    # service_stat : 
-    serve_rating_p1 = page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .player-stats-item div.value').text_content()
-    aces_p1 = page.locator('li:has(div.stats-item-legend:text-is("Aces")) .player-stats-item div.value').text_content()
-    double_faults_p1 =page.locator('li:has(div.stats-item-legend:text-is("Double Faults")) .player-stats-item div.value').text_content()
-    first_serve_p1 =page.locator('li:has(div.stats-item-legend:text-is("1st Serve")) .player-stats-item div.value').text_content()
-    first_serve_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("1st Serve Points Won")) .player-stats-item div.value').text_content()
-    second_serve_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Points Won")) .player-stats-item div.value').text_content()
-    break_pts_saved_p1 =page.locator('li:has(div.stats-item-legend:text-is("Break Points Saved")) .player-stats-item div.value').text_content()
-    service_game_played_p1 = page.locator('li:has(div.stats-item-legend:text-is("Service Games Played")) .player-stats-item div.value').text_content()
+    try :
+        # player name :
+        player_1 = page.locator('div.player-team > div.names > div.name > a').text_content()
+        player_2 = page.locator('div.opponent-team > div.names > div.name > a').text_content()
+        country_p1 = page.locator('div.player-team > div.names > div.name > span.country').text_content()
+        country_p2 = page.locator('div.opponent-team > div.names > div.name > span.country').text_content()
 
-    serve_rating_p2= page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .opponent-stats-item div.value').text_content()
-    aces_p2= page.locator('li:has(div.stats-item-legend:text-is("Aces")) .opponent-stats-item div.value').text_content()
-    double_faults_p2=page.locator('li:has(div.stats-item-legend:text-is("Double Faults")) .opponent-stats-item div.value').text_content()
-    first_serve_p2=page.locator('li:has(div.stats-item-legend:text-is("1st Serve")) .opponent-stats-item div.value').text_content()
-    first_serve_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("1st Serve Points Won")) .opponent-stats-item div.value').text_content()
-    second_serve_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Points Won")) .opponent-stats-item div.value').text_content()
-    break_pts_saved_p2 =page.locator('li:has(div.stats-item-legend:text-is("Break Points Saved")) .opponent-stats-item div.value').text_content()
-    service_game_played_p2=page.locator('li:has(div.stats-item-legend:text-is("Service Games Played")) .opponent-stats-item div.value').text_content()
+        
+        # service_stat : 
+        serve_rating_p1 = page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .player-stats-item div.value').text_content()
+        aces_p1 = page.locator('li:has(div.stats-item-legend:text-is("Aces")) .player-stats-item div.value').text_content()
+        double_faults_p1 =page.locator('li:has(div.stats-item-legend:text-is("Double Faults")) .player-stats-item div.value').text_content()
+        first_serve_p1 =page.locator('li:has(div.stats-item-legend:text-is("1st Serve")) .player-stats-item div.value').text_content()
+        first_serve_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("1st Serve Points Won")) .player-stats-item div.value').text_content()
+        second_serve_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Points Won")) .player-stats-item div.value').text_content()
+        break_pts_saved_p1 =page.locator('li:has(div.stats-item-legend:text-is("Break Points Saved")) .player-stats-item div.value').text_content()
+        service_game_played_p1 = page.locator('li:has(div.stats-item-legend:text-is("Service Games Played")) .player-stats-item div.value').text_content()
+
+        serve_rating_p2= page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .opponent-stats-item div.value').text_content()
+        aces_p2= page.locator('li:has(div.stats-item-legend:text-is("Aces")) .opponent-stats-item div.value').text_content()
+        double_faults_p2=page.locator('li:has(div.stats-item-legend:text-is("Double Faults")) .opponent-stats-item div.value').text_content()
+        first_serve_p2=page.locator('li:has(div.stats-item-legend:text-is("1st Serve")) .opponent-stats-item div.value').text_content()
+        first_serve_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("1st Serve Points Won")) .opponent-stats-item div.value').text_content()
+        second_serve_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Points Won")) .opponent-stats-item div.value').text_content()
+        break_pts_saved_p2 =page.locator('li:has(div.stats-item-legend:text-is("Break Points Saved")) .opponent-stats-item div.value').text_content()
+        service_game_played_p2=page.locator('li:has(div.stats-item-legend:text-is("Service Games Played")) .opponent-stats-item div.value').text_content()
 
 
-    #return_stat :
-    return_rating_p1 = page.locator('li:has(div.stats-item-legend:text-is("Return Rating")) .player-stats-item div.value').text_content()
-    first_serve_return_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("1st Serve Return Points Won")) .player-stats-item div.value').text_content()
-    second_serve_return_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Return Points Won")) .player-stats-item div.value').text_content()
-    break_pts_converted_p1 = page.locator('li:has(div.stats-item-legend:text-is("Break Points Converted")) .player-stats-item div.value').text_content()
-    return_games_played_p1 =page.locator('li:has(div.stats-item-legend:text-is("Return Games Played")) .player-stats-item div.value').text_content()
+        #return_stat :
+        return_rating_p1 = page.locator('li:has(div.stats-item-legend:text-is("Return Rating")) .player-stats-item div.value').text_content()
+        first_serve_return_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("1st Serve Return Points Won")) .player-stats-item div.value').text_content()
+        second_serve_return_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Return Points Won")) .player-stats-item div.value').text_content()
+        break_pts_converted_p1 = page.locator('li:has(div.stats-item-legend:text-is("Break Points Converted")) .player-stats-item div.value').text_content()
+        return_games_played_p1 =page.locator('li:has(div.stats-item-legend:text-is("Return Games Played")) .player-stats-item div.value').text_content()
 
-    return_rating_p2= page.locator('li:has(div.stats-item-legend:text-is("Return Rating")) .opponent-stats-item div.value').text_content()
-    first_serve_return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("1st Serve Return Points Won")) .opponent-stats-item div.value').text_content()
-    second_serve_return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Return Points Won")) .opponent-stats-item div.value').text_content()
-    break_pts_converted_p2= page.locator('li:has(div.stats-item-legend:text-is("Break Points Converted")) .opponent-stats-item div.value').text_content()
-    return_games_played_p2=page.locator('li:has(div.stats-item-legend:text-is("Return Games Played")) .opponent-stats-item div.value').text_content()
+        return_rating_p2= page.locator('li:has(div.stats-item-legend:text-is("Return Rating")) .opponent-stats-item div.value').text_content()
+        first_serve_return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("1st Serve Return Points Won")) .opponent-stats-item div.value').text_content()
+        second_serve_return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Return Points Won")) .opponent-stats-item div.value').text_content()
+        break_pts_converted_p2= page.locator('li:has(div.stats-item-legend:text-is("Break Points Converted")) .opponent-stats-item div.value').text_content()
+        return_games_played_p2=page.locator('li:has(div.stats-item-legend:text-is("Return Games Played")) .opponent-stats-item div.value').text_content()
+        
+        
+        #pts_stats :
+        service_pts_won_p1 = page.locator('li:has(div.stats-item-legend:text-is("Service Points Won")) .player-stats-item div.value').text_content()
+        return_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("Return Points Won")) .player-stats-item div.value').text_content()
+        total_point_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("Total Points Won")) .player-stats-item div.value').text_content()
+
+        service_pts_won_p2= page.locator('li:has(div.stats-item-legend:text-is("Service Points Won")) .opponent-stats-item div.value').text_content()
+        return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("Return Points Won")) .opponent-stats-item div.value').text_content()
+        total_point_won_p2=page.locator('li:has(div.stats-item-legend:text-is("Total Points Won")) .opponent-stats-item div.value').text_content()
     
-    
-    #pts_stats :
-    service_pts_won_p1 = page.locator('li:has(div.stats-item-legend:text-is("Service Points Won")) .player-stats-item div.value').text_content()
-    return_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("Return Points Won")) .player-stats-item div.value').text_content()
-    total_point_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("Total Points Won")) .player-stats-item div.value').text_content()
+    except :
+        print("--------------------------------------------------------")
+        print(f"BUG extract_match_stat : {url}")
+        print("--------------------------------------------------------")
+        page.pause()
 
-    service_pts_won_p2= page.locator('li:has(div.stats-item-legend:text-is("Service Points Won")) .opponent-stats-item div.value').text_content()
-    return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("Return Points Won")) .opponent-stats-item div.value').text_content()
-    total_point_won_p2=page.locator('li:has(div.stats-item-legend:text-is("Total Points Won")) .opponent-stats-item div.value').text_content()
-    
 
     page.close()
     return {"player_1" : player_1,
@@ -246,7 +254,7 @@ def main():
             list_match_link_per_tournament = []
             for tournament_link in list_tournament_link : 
                 list_match_link_per_tournament.append(extract_matches_link(browser=browser, url=f"https://www.atptour.com{tournament_link}"))
-                time.sleep(5)
+                time.sleep(4)
             print("extract tournament_info + matches_link OK")
 
 
@@ -258,7 +266,7 @@ def main():
                 dict_match_stats[tournament_name] = [dict_tournament[tournament_name][0]]
                 for match_link in tqdm(dict_tournament[tournament_name][1]) :
                     dict_match_stats[tournament_name].append({f"{match_link.split("/")[-1]}" : extract_match_stats(browser=browser, url=f"https://www.atptour.com{match_link}")})
-                    time.sleep(5)
+                    time.sleep(4)
             print("extract_match_stats OK")
 
 
