@@ -110,7 +110,8 @@ def extract_matches_link(browser, url):
 def extract_match_stats(browser, url) :
     page = browser.new_page()
     page.goto(url)
-
+    time.sleep(5)
+    
     # accept cookies
     try : 
         page.wait_for_selector('xpath=//a[@class="atp_button atp_button--invert atp_button--continue"]', timeout=20000)

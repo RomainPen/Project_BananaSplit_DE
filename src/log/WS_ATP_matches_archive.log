@@ -1,0 +1,7 @@
+14-11-2024 | 01:00:11 - ERROR - Accept cookies button doesn't exist : Locator.click: Timeout 30000ms exceeded.
+Call log:
+waiting for locator("//a[@class=\"atp_button atp_button--invert atp_button--continue\"]")
+  -   locator resolved to <a href="#" class="atp_button atp_button--invert atp_button--continue">Continue</a>
+  - attempting click action
+  -   waiting for element to be visible, enabled and stable
+
