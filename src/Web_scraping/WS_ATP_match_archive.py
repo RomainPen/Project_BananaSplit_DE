@@ -27,6 +27,7 @@ logging.basicConfig(level=logging.INFO,
 def extract_tournament_link(browser, url) :
     page = browser.new_page()
     page.goto(url)
+    time.sleep(5)
 
     # accept cookies
     try : 
@@ -55,6 +56,7 @@ def extract_tournament_link(browser, url) :
 def extract_matches_link(browser, url):
     page = browser.new_page()
     page.goto(url)
+    time.sleep(5)
 
     # accept cookies
     try : 
@@ -77,6 +79,7 @@ def extract_matches_link(browser, url):
     tournament_info_url = page.locator('div.rotator-content > div.rotator-next > a').get_attribute('href')
     page_2 = browser.new_page()
     page_2.goto(f"https://www.atptour.com{tournament_info_url}")
+    time.sleep(5)
     
     try : 
         # location :
@@ -108,10 +111,9 @@ def extract_matches_link(browser, url):
 
 
 def extract_match_stats(browser, url) :
-    time.sleep(3)
     page = browser.new_page()
     page.goto(url)
-    
+    time.sleep(5)
     
     # accept cookies
     try : 
@@ -248,6 +250,11 @@ def main():
             # extract_tournament_link :
             list_tournament_link = extract_tournament_link(browser=browser, url=url_year_season)
             print("extract_tournament_link OK")
+
+
+            #todo (temp) :
+            list_tournament_link = list_tournament_link[:3]
+            print(list_tournament_link)
 
 
             # extract tournament_info + matches_link :
