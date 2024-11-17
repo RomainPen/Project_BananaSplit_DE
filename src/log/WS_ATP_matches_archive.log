@@ -1,4 +1,0 @@
-14-11-2024 | 23:33:01 - ERROR - Accept cookies button doesn't exist : Page.wait_for_selector: Timeout 20000ms exceeded.
-Call log:
-waiting for locator("//a[@class=\"atp_button atp_button--invert atp_button--continue\"]") to be visible
-

@@ -27,7 +27,7 @@ logging.basicConfig(level=logging.INFO,
 def extract_tournament_link(browser, url) :
     page = browser.new_page()
     page.goto(url)
-    time.sleep(5)
+    time.sleep(3)
 
     # accept cookies
     try : 
@@ -56,7 +56,7 @@ def extract_tournament_link(browser, url) :
 def extract_matches_link(browser, url):
     page = browser.new_page()
     page.goto(url)
-    time.sleep(5)
+    time.sleep(3)
 
     # accept cookies
     try : 
@@ -79,7 +79,7 @@ def extract_matches_link(browser, url):
     tournament_info_url = page.locator('div.rotator-content > div.rotator-next > a').get_attribute('href')
     page_2 = browser.new_page()
     page_2.goto(f"https://www.atptour.com{tournament_info_url}")
-    time.sleep(5)
+    time.sleep(3)
     
     try : 
         # location :
@@ -112,6 +112,7 @@ def extract_matches_link(browser, url):
 
 def extract_match_stats(browser, url) :
     page = browser.new_page()
+    time.sleep(2)
     page.goto(url)
     time.sleep(5)
     
@@ -253,15 +254,15 @@ def main():
 
 
             #todo (temp) :
-            list_tournament_link = list_tournament_link[:3]
-            print(list_tournament_link)
+            # list_tournament_link = list_tournament_link[:3]
+            # print(list_tournament_link)
 
 
             # extract tournament_info + matches_link :
             list_match_link_per_tournament = []
             for tournament_link in list_tournament_link : 
                 list_match_link_per_tournament.append(extract_matches_link(browser=browser, url=f"https://www.atptour.com{tournament_link}"))
-                time.sleep(4)
+                time.sleep(3)
             print("extract tournament_info + matches_link OK")
 
 
