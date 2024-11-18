@@ -1,18 +1,12 @@
 # WS ATP_matches_archive
 
-# Step :
-# - Fonction pour changer les critère (Click)
-# - Fonction pour la loop item
-# - Fonction pour l'extraction des donnees
-# - Fonction pour exporter la data sous excel
-# - Fonction pour la pagination
-
 
 # import package :
 import logging
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 import time
 from tqdm import tqdm
+import yaml
 
 logging.basicConfig(level=logging.INFO,
                     filename="./src/log/WS_ATP_matches_archive.log",
@@ -27,7 +21,7 @@ logging.basicConfig(level=logging.INFO,
 def extract_tournament_link(browser, url) :
     page = browser.new_page()
     page.goto(url)
-    time.sleep(3)
+    # time.sleep(3)
 
     # accept cookies
     try : 
@@ -56,7 +50,7 @@ def extract_tournament_link(browser, url) :
 def extract_matches_link(browser, url):
     page = browser.new_page()
     page.goto(url)
-    time.sleep(3)
+    # time.sleep(3)
 
     # accept cookies
     try : 
@@ -75,11 +69,21 @@ def extract_matches_link(browser, url):
     date = page.locator('div.date-location > span:last-child').text_content()
 
 
-    # extract specific tournament_info : 
+    # list_match_link :
+    all_match_link_html = page.locator('div.match > div.match-footer > div.match-cta > a:text("Stats")').all()
+    list_match_link = []
+    for html_element in all_match_link_html:
+        match_link = html_element.get_attribute('href')
+        list_match_link.append(match_link)
+
+    
+    # extract specific tournament_info :
     tournament_info_url = page.locator('div.rotator-content > div.rotator-next > a').get_attribute('href')
+    page.close()
+
     page_2 = browser.new_page()
     page_2.goto(f"https://www.atptour.com{tournament_info_url}")
-    time.sleep(3)
+    # time.sleep(3)
     
     try : 
         # location :
@@ -96,15 +100,6 @@ def extract_matches_link(browser, url):
     page_2.close()
     
 
-    # list_match_link :
-    all_match_link_html = page.locator('div.match > div.match-footer > div.match-cta > a:text("Stats")').all()
-    list_match_link = []
-    for html_element in all_match_link_html:
-        match_link = html_element.get_attribute('href')
-        list_match_link.append(match_link)
-
-    page.close()
-
     return {f"{title}" : [{"date" : date, "location" : location, "surface" : surface} , list_match_link]}
 
 
@@ -112,9 +107,9 @@ def extract_matches_link(browser, url):
 
 def extract_match_stats(browser, url) :
     page = browser.new_page()
-    time.sleep(2)
+    # time.sleep(2)
     page.goto(url)
-    time.sleep(5)
+    # time.sleep(5)
     
     # accept cookies
     try : 
@@ -235,14 +230,14 @@ def extract_match_stats(browser, url) :
 
 
 # Main :
-def main():
+def main(SBR_WS_CDP):
 
     for year_season in range(2010, 2011) :
         
         with sync_playwright() as p :
 
             # Connection to Chromium :
-            browser = p.chromium.launch(headless=False) #connect_over_cdp(SBR_WS_CDP) #.launch(headless=False)
+            browser = p.chromium.launch(headless=False) #.connect_over_cdp(SBR_WS_CDP) #.launch(headless=False)
 
             # Parametrisation :
             url_year_season = f"https://www.atptour.com/en/scores/results-archive?tournamentType=atpgs&year={year_season}"
@@ -254,15 +249,15 @@ def main():
 
 
             #todo (temp) :
-            # list_tournament_link = list_tournament_link[:3]
-            # print(list_tournament_link)
+            list_tournament_link = list_tournament_link[:3]
+            print(list_tournament_link)
 
 
             # extract tournament_info + matches_link :
             list_match_link_per_tournament = []
             for tournament_link in list_tournament_link : 
                 list_match_link_per_tournament.append(extract_matches_link(browser=browser, url=f"https://www.atptour.com{tournament_link}"))
-                time.sleep(3)
+                # time.sleep(3)
             print("extract tournament_info + matches_link OK")
 
 
@@ -274,7 +269,7 @@ def main():
                 dict_match_stats[tournament_name] = [dict_tournament[tournament_name][0]]
                 for match_link in tqdm(dict_tournament[tournament_name][1]) :
                     dict_match_stats[tournament_name].append({f"{match_link.split("/")[-1]}" : extract_match_stats(browser=browser, url=f"https://www.atptour.com{match_link}")})
-                    time.sleep(4)
+                    # time.sleep(4)
             print("extract_match_stats OK")
 
 
@@ -291,11 +286,16 @@ def main():
 
 
 if __name__ == "__main__":
+
+    with open(f'./config/config_WS_ATP_match_archive.yaml', 'r') as config_file :
+        settings = yaml.safe_load(config_file)
+
+
     # compute time running :
     start_time = time.time()
     
     # run main :
-    main()
+    main(SBR_WS_CDP = settings["SBR_WS_CDP"])
 
     # End the timer
     end_time = time.time()
