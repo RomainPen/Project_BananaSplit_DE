@@ -109,7 +109,7 @@ def extract_match_stats(browser, url) :
     page = browser.new_page()
     # time.sleep(2)
     page.goto(url)
-    # time.sleep(5)
+    time.sleep(5)
     
     # accept cookies
     try : 
@@ -249,7 +249,7 @@ def main(SBR_WS_CDP):
 
 
             #todo (temp) :
-            list_tournament_link = list_tournament_link[:3]
+            list_tournament_link = list_tournament_link[:30]
             print(list_tournament_link)
 
 
