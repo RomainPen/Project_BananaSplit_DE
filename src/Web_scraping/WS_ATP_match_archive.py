@@ -8,7 +8,7 @@ import time
 from tqdm import tqdm
 import yaml
 
-logging.basicConfig(level=logging.INFO,
+logging.basicConfig(level=logging.DEBUG,
                     filename="./src/log/WS_ATP_matches_archive.log",
                     filemode="w",
                     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -17,12 +17,7 @@ logging.basicConfig(level=logging.INFO,
 
 
 
-
-def extract_tournament_link(browser, url) :
-    page = browser.new_page()
-    page.goto(url)
-    # time.sleep(3)
-
+def accept_cookie(page) :
     # accept cookies
     try : 
         page.wait_for_selector('xpath=//a[@class="atp_button atp_button--invert atp_button--continue"]', timeout=20000)
@@ -33,13 +28,32 @@ def extract_tournament_link(browser, url) :
         pass
 
 
-    # extract_tournament_link
+
+
+
+def extract_tournament_link(browser, url) :
+    
+    # open page :
+    try :
+        page = browser.new_page()
+        page.goto(url, timeout=60000)
+    except PlaywrightTimeoutError as e :
+        page.close()
+        time.sleep(10)
+        page = browser.new_page()
+        page.goto(url, timeout=60000)
+
+    # accept cookies
+    accept_cookie(page=page)
+
+    # extract_tournament_link :
     all_tournament_link_html = page.locator('div.non-live-cta > a.results').all()
     list_tournament_link = []
     for html_element in all_tournament_link_html :
         tournament_link = html_element.get_attribute('href')
         list_tournament_link.append(tournament_link)
-        
+
+    # close page :
     page.close()
     
     return list_tournament_link
@@ -47,54 +61,61 @@ def extract_tournament_link(browser, url) :
 
 
 
+
+
 def extract_matches_link(browser, url):
-    page = browser.new_page()
-    page.goto(url)
-    # time.sleep(3)
+    
+    # Page 1 :
+    try :
+        page = browser.new_page()
+        page.goto(url, timeout=60000)
+    except PlaywrightTimeoutError as e :
+        page.close()
+        time.sleep(10)
+        page = browser.new_page()
+        page.goto(url, timeout=60000)
 
     # accept cookies
-    try : 
-        page.wait_for_selector('xpath=//a[@class="atp_button atp_button--invert atp_button--continue"]', timeout=20000)
-        page.locator('xpath=//a[@class="atp_button atp_button--invert atp_button--continue"]').click()
+    accept_cookie(page=page)
     
-    except PlaywrightTimeoutError as e :
-        logging.error(f"Accept cookies button doesn't exist : {e}")
-        pass
-    
-
-    # title :
+    # extract title and date :
     title = page.locator('div.status-country > h3.title > a').text_content()
-
-    # date : 
     date = page.locator('div.date-location > span:last-child').text_content()
 
-
-    # list_match_link :
+    # extract list_match_link :
     all_match_link_html = page.locator('div.match > div.match-footer > div.match-cta > a:text("Stats")').all()
     list_match_link = []
     for html_element in all_match_link_html:
         match_link = html_element.get_attribute('href')
         list_match_link.append(match_link)
 
-    
     # extract specific tournament_info :
     tournament_info_url = page.locator('div.rotator-content > div.rotator-next > a').get_attribute('href')
     page.close()
 
-    page_2 = browser.new_page()
-    page_2.goto(f"https://www.atptour.com{tournament_info_url}")
-    # time.sleep(3)
     
-    try : 
-        # location :
-        location = page_2.locator('ul.td_right > li:has(span:text-is("Location")) > span:last-child').text_content()
-        # surface : 
-        surface = page_2.locator('ul.td_left > li:has(span:text-is("Surface")) > span:last-child').text_content()
+    # Page 2 :
+    try :
+        page_2 = browser.new_page()
+        # time.sleep(1)
+        page_2.goto(f"https://www.atptour.com{tournament_info_url}", timeout=100000)
+        # time.sleep(3)
+    except PlaywrightTimeoutError as e :
+        page_2.close()
+        time.sleep(10)
+        page_2 = browser.new_page()
+        # time.sleep(1)
+        page_2.goto(f"https://www.atptour.com{tournament_info_url}", timeout=100000)
 
+    # accept_cookies :
+    accept_cookie(page=page_2)
+    
+    # extract tournament location and surface : 
+    try : 
+        location = page_2.locator('ul.td_right > li:has(span:text-is("Location")) > span:last-child').text_content()
+        surface = page_2.locator('ul.td_left > li:has(span:text-is("Surface")) > span:last-child').text_content()
     except : 
-        # location :
         location = "None"
-        # surface : 
         surface = "None"
 
     page_2.close()
@@ -106,21 +127,21 @@ def extract_matches_link(browser, url):
 
 
 def extract_match_stats(browser, url) :
-    page = browser.new_page()
-    # time.sleep(2)
-    page.goto(url)
-    time.sleep(5)
+    # open page :
+    try :
+        page = browser.new_page()
+        page.goto(url, timeout=60000)
+    except PlaywrightTimeoutError as e :
+        page.close()
+        time.sleep(10)
+        page = browser.new_page()
+        page.goto(url, timeout=60000)
     
     # accept cookies
-    try : 
-        page.wait_for_selector('xpath=//a[@class="atp_button atp_button--invert atp_button--continue"]', timeout=20000)
-        page.locator('xpath=//a[@class="atp_button atp_button--invert atp_button--continue"]').click()
-    
-    except PlaywrightTimeoutError as e :
-        logging.error(f"Accept cookies button doesn't exist : {e}")
-        pass
+    accept_cookie(page=page)
     
     
+    # extact match stats : 
     try :
         # player name :
         player_1 = page.locator('div.player-team > div.names > div.name > a').text_content()
@@ -172,14 +193,64 @@ def extract_match_stats(browser, url) :
         return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("Return Points Won")) .opponent-stats-item div.value').text_content()
         total_point_won_p2=page.locator('li:has(div.stats-item-legend:text-is("Total Points Won")) .opponent-stats-item div.value').text_content()
     
+
     except :
-        print("--------------------------------------------------------")
-        print(f"BUG extract_match_stat : {url}")
-        print("--------------------------------------------------------")
-        page.pause()
+        # player name :
+        player_1 = "None"
+        player_2 = "None"
+        country_p1 = "None"
+        country_p2 = "None"
 
+        
+        # service_stat : 
+        serve_rating_p1 = "None"
+        aces_p1 = "None"
+        double_faults_p1 = "None"
+        first_serve_p1 ="None"
+        first_serve_pts_won_p1 ="None"
+        second_serve_pts_won_p1 ="None"
+        break_pts_saved_p1 ="None"
+        service_game_played_p1 = "None"
 
+        serve_rating_p2= "None"
+        aces_p2= "None"
+        double_faults_p2="None"
+        first_serve_p2="None"
+        first_serve_pts_won_p2="None"
+        second_serve_pts_won_p2="None"
+        break_pts_saved_p2 ="None"
+        service_game_played_p2= "None"
+
+        #return_stat :
+        return_rating_p1 = "None"
+        first_serve_return_pts_won_p1 ="None"
+        second_serve_return_pts_won_p1 ="None"
+        break_pts_converted_p1 = "None"
+        return_games_played_p1 ="None"
+
+        return_rating_p2= "None"
+        first_serve_return_pts_won_p2="None"
+        second_serve_return_pts_won_p2="None"
+        break_pts_converted_p2= "None"
+        return_games_played_p2="None"
+        
+
+        #pts_stats :
+        service_pts_won_p1 = "None"
+        return_pts_won_p1 ="None"
+        total_point_won_p1 ="None"
+
+        service_pts_won_p2= "None"
+        return_pts_won_p2="None"
+        total_point_won_p2="None"
+
+        logging.error(f"BUG. No match stat : {url}")
+        
+
+    # close page :
     page.close()
+
+
     return {"player_1" : player_1,
             "player_2" : player_2, 
             "country_p1" : country_p1,
