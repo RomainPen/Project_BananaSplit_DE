@@ -17,7 +17,7 @@ def main():
         browser = p.chromium.launch(headless=False)
 
         # open page :
-        url = "https://www.atptour.com/en/scores/match-stats/archive/2010/339/ms001"
+        url = "https://www.atptour.com/en/scores/match-stats/archive/2010/468/qs008"
         page = browser.new_page()
         page.goto(url)
 

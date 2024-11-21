@@ -133,7 +133,7 @@ def extract_match_stats(browser, url) :
         page.goto(url, timeout=60000)
     except PlaywrightTimeoutError as e :
         page.close()
-        time.sleep(10)
+        time.sleep(30)
         page = browser.new_page()
         page.goto(url, timeout=60000)
     
@@ -301,9 +301,9 @@ def extract_match_stats(browser, url) :
 
 
 # Main :
-def main(SBR_WS_CDP):
+def main(SBR_WS_CDP, year_range=[2010, 2011]):
 
-    for year_season in range(2010, 2011) :
+    for year_season in range(year_range[0], year_range[1]) :
         
         with sync_playwright() as p :
 
@@ -358,15 +358,15 @@ def main(SBR_WS_CDP):
 
 if __name__ == "__main__":
 
-    with open(f'./config/config_WS_ATP_match_archive.yaml', 'r') as config_file :
-        settings = yaml.safe_load(config_file)
+    # with open(f'./config/config_WS_ATP_match_archive.yaml', 'r') as config_file :
+    #     settings = yaml.safe_load(config_file)
 
 
     # compute time running :
     start_time = time.time()
     
     # run main :
-    main(SBR_WS_CDP = settings["SBR_WS_CDP"])
+    main(SBR_WS_CDP=None, year_range=[2010, 2011])
 
     # End the timer
     end_time = time.time()
