@@ -133,9 +133,11 @@ def extract_match_stats(browser, url) :
         page.goto(url, timeout=60000)
     except PlaywrightTimeoutError as e :
         page.close()
-        time.sleep(30)
+        time.sleep(10)
         page = browser.new_page()
+        time.sleep(5)
         page.goto(url, timeout=60000)
+        time.sleep(10)
     
     # accept cookies
     accept_cookie(page=page)
@@ -143,6 +145,9 @@ def extract_match_stats(browser, url) :
     
     # extact match stats : 
     try :
+        # var_untracked_match_link :
+        var_untracked_match_link = "None"
+
         # player name :
         player_1 = page.locator('div.player-team > div.names > div.name > a').text_content()
         player_2 = page.locator('div.opponent-team > div.names > div.name > a').text_content()
@@ -195,6 +200,9 @@ def extract_match_stats(browser, url) :
     
 
     except :
+        # Update var_untracked_match_link :
+        var_untracked_match_link = url
+
         # player name :
         player_1 = "None"
         player_2 = "None"
@@ -292,8 +300,9 @@ def extract_match_stats(browser, url) :
 
             "service_pts_won_p2": service_pts_won_p2,
             "return_pts_won_p2":return_pts_won_p2,
-            "total_point_won_p2":total_point_won_p2
-            }
+            "total_point_won_p2":total_point_won_p2,
+            
+            "var_untracked_match_link" : var_untracked_match_link}
 
 
 
@@ -319,9 +328,9 @@ def main(SBR_WS_CDP, year_range=[2010, 2011]):
             print("extract_tournament_link OK")
 
 
-            #todo (temp) :
-            list_tournament_link = list_tournament_link[:30]
-            print(list_tournament_link)
+            # #todo (temp) :
+            # list_tournament_link = list_tournament_link[:30]
+            # print(list_tournament_link)
 
 
             # extract tournament_info + matches_link :
@@ -334,22 +343,35 @@ def main(SBR_WS_CDP, year_range=[2010, 2011]):
 
             # extract_match_stats :
             dict_match_stats = {}
+            dict_missing_match_stat = {}
+
             for dict_tournament in list_match_link_per_tournament :
                 tournament_name = list(dict_tournament.keys())[0]
-
                 dict_match_stats[tournament_name] = [dict_tournament[tournament_name][0]]
+                dict_missing_match_stat[tournament_name] = []
+
                 for match_link in tqdm(dict_tournament[tournament_name][1]) :
-                    dict_match_stats[tournament_name].append({f"{match_link.split("/")[-1]}" : extract_match_stats(browser=browser, url=f"https://www.atptour.com{match_link}")})
+                    dict_extract_match_stats = extract_match_stats(browser=browser, url=f"https://www.atptour.com{match_link}")
+                    dict_match_stats[tournament_name].append({f"{match_link.split("/")[-1]}" : dict_extract_match_stats})
+                    
+                    if dict_extract_match_stats["var_untracked_match_link"] != "None" :
+                        dict_missing_match_stat[tournament_name].append(dict_extract_match_stats["var_untracked_match_link"])
+                    else :
+                        pass
+
+
                     # time.sleep(4)
             print("extract_match_stats OK")
 
 
 
             # Update ATP_match_archive_{year_season}.txt :
-            with open(f'./data/1_data_bronze/03_ATP_website/ATP_matches_archive/ATP_match_archive_{year_season}.txt', 'w') as file:
-                file.write(str(dict_match_stats))
+            with open(f'./data/1_data_bronze/03_ATP_website/ATP_matches_archive/ATP_match_archive_{year_season}.txt', 'w') as ATP_match_archive_file:
+                ATP_match_archive_file.write(str(dict_match_stats))
         
-
+            # Update ATP_match_archive_missing_stat_{year_season}.txt :
+            with open(f'./data/1_data_bronze/03_ATP_website/ATP_matches_archive/ATP_match_archive_missing_stat_{year_season}.txt', 'w') as ATP_match_archive_missing_stat_file:
+                ATP_match_archive_missing_stat_file.write(str(dict_missing_match_stat))
 
 
 
