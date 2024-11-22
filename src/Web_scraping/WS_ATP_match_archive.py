@@ -317,8 +317,14 @@ def extract_match_stats(browser, url) :
 ########################################################### Main : ################################################################
 def main(SBR_WS_CDP, year_range=[2010, 2011]):
 
-    for year_season in range(year_range[0], year_range[1]) :
+    for year_season in range(year_range[0], year_range[1]+1) :
         
+        print(f"_"*50)
+        print(f"|", f" "*50, f"|")
+        print(f"|", f"-"*20, f"  {year_season}  ", f"-"*20, f"|")
+        print(f"|", f"_"*40, f"|")
+
+
         with sync_playwright() as p :
 
             # Connection to Chromium :
@@ -333,9 +339,9 @@ def main(SBR_WS_CDP, year_range=[2010, 2011]):
             print("extract_tournament_link OK")
 
 
-            #todo (temp) :
-            list_tournament_link = list_tournament_link[:5]
-            print(list_tournament_link)
+            # #todo (temp) :
+            # list_tournament_link = list_tournament_link[:2]
+            # print(list_tournament_link)
 
 
             # extract tournament_info + matches_link :
