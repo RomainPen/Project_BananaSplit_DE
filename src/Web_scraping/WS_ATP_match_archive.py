@@ -16,6 +16,23 @@ logging.basicConfig(level=logging.DEBUG,
                     )
 
 
+############################################ Common functions :#####################################################
+def try_except_page_goto(browser, url) :
+    # open page :
+        try :
+            page = browser.new_page()
+            page.goto(url, timeout=60000)
+        except :
+            page.close()
+            time.sleep(10)
+            page = browser.new_page()
+            time.sleep(5)
+            page.goto(url, timeout=60000)
+            time.sleep(10)
+
+        return page
+
+
 
 def accept_cookie(page) :
     # accept cookies
@@ -31,17 +48,14 @@ def accept_cookie(page) :
 
 
 
+
+
+
+############################################### Web scraping functions : ############################################
 def extract_tournament_link(browser, url) :
     
     # open page :
-    try :
-        page = browser.new_page()
-        page.goto(url, timeout=60000)
-    except PlaywrightTimeoutError as e :
-        page.close()
-        time.sleep(10)
-        page = browser.new_page()
-        page.goto(url, timeout=60000)
+    page = try_except_page_goto(browser=browser, url=url)
 
     # accept cookies
     accept_cookie(page=page)
@@ -63,17 +77,12 @@ def extract_tournament_link(browser, url) :
 
 
 
+
+
 def extract_matches_link(browser, url):
     
     # Page 1 :
-    try :
-        page = browser.new_page()
-        page.goto(url, timeout=60000)
-    except PlaywrightTimeoutError as e :
-        page.close()
-        time.sleep(10)
-        page = browser.new_page()
-        page.goto(url, timeout=60000)
+    page = try_except_page_goto(browser=browser, url=url)
 
     # accept cookies
     accept_cookie(page=page)
@@ -95,17 +104,7 @@ def extract_matches_link(browser, url):
 
     
     # Page 2 :
-    try :
-        page_2 = browser.new_page()
-        # time.sleep(1)
-        page_2.goto(f"https://www.atptour.com{tournament_info_url}", timeout=100000)
-        # time.sleep(3)
-    except PlaywrightTimeoutError as e :
-        page_2.close()
-        time.sleep(10)
-        page_2 = browser.new_page()
-        # time.sleep(1)
-        page_2.goto(f"https://www.atptour.com{tournament_info_url}", timeout=100000)
+    page_2 = try_except_page_goto(browser=browser, url=f"https://www.atptour.com{tournament_info_url}")
 
     # accept_cookies :
     accept_cookie(page=page_2)
@@ -126,25 +125,22 @@ def extract_matches_link(browser, url):
 
 
 
+
+
+
+
+
 def extract_match_stats(browser, url) :
-    # open page :
+    
     try :
-        page = browser.new_page()
-        page.goto(url, timeout=60000)
-    except PlaywrightTimeoutError as e :
-        page.close()
-        time.sleep(10)
-        page = browser.new_page()
-        time.sleep(5)
-        page.goto(url, timeout=60000)
-        time.sleep(10)
-    
-    # accept cookies
-    accept_cookie(page=page)
-    
-    
-    # extact match stats : 
-    try :
+        # page goto :
+        page = try_except_page_goto(browser=browser, url=url)
+        
+        # accept cookies
+        accept_cookie(page=page)
+        
+        
+        # extact match stats : 
         # var_untracked_match_link :
         var_untracked_match_link = "None"
 
@@ -197,7 +193,7 @@ def extract_match_stats(browser, url) :
         service_pts_won_p2= page.locator('li:has(div.stats-item-legend:text-is("Service Points Won")) .opponent-stats-item div.value').text_content()
         return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("Return Points Won")) .opponent-stats-item div.value').text_content()
         total_point_won_p2=page.locator('li:has(div.stats-item-legend:text-is("Total Points Won")) .opponent-stats-item div.value').text_content()
-    
+        
 
     except :
         # Update var_untracked_match_link :
@@ -253,10 +249,15 @@ def extract_match_stats(browser, url) :
         total_point_won_p2="None"
 
         logging.error(f"BUG. No match stat : {url}")
-        
+
 
     # close page :
-    page.close()
+    finally :
+        try :
+            page.close()
+        except :
+            pass
+
 
 
     return {"player_1" : player_1,
@@ -309,7 +310,11 @@ def extract_match_stats(browser, url) :
 
 
 
-# Main :
+
+
+
+
+########################################################### Main : ################################################################
 def main(SBR_WS_CDP, year_range=[2010, 2011]):
 
     for year_season in range(year_range[0], year_range[1]) :
@@ -328,9 +333,9 @@ def main(SBR_WS_CDP, year_range=[2010, 2011]):
             print("extract_tournament_link OK")
 
 
-            # #todo (temp) :
-            # list_tournament_link = list_tournament_link[:30]
-            # print(list_tournament_link)
+            #todo (temp) :
+            list_tournament_link = list_tournament_link[:5]
+            print(list_tournament_link)
 
 
             # extract tournament_info + matches_link :
