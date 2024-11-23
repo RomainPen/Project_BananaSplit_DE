@@ -7,12 +7,15 @@ from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeo
 import time
 from tqdm import tqdm
 import yaml
+import multiprocessing
+
 
 
 ############################################ Logging for DEBUG : #####################################################
 
-logging.basicConfig(level=logging.DEBUG,
-                    filename="./src/log/WS_ATP_matches_archive_{input}.log",
+def setup_logging(year_range):
+    logging.basicConfig(level=logging.DEBUG,
+                    filename=f"./src/log/WS_ATP_matches_archive_{year_range[0]}-{year_range[1]}.log",
                     filemode="w",
                     format="%(asctime)s - %(levelname)s - %(message)s",
                     datefmt="%d-%m-%Y | %H:%M:%S"
@@ -323,74 +326,81 @@ def extract_match_stats(browser, url) :
 
 
 ########################################################### Main : ################################################################
-def main(SBR_WS_CDP, year_range=[2010, 2011]):
+def scrape_years(year_range):
+    
+    setup_logging(year_range)
+    print(f"Starting scraping for years {year_range[0]}-{year_range[1]}")
+    
 
-    for year_season in range(year_range[0], year_range[1]+1) :
+    start_time = time.time()
+    
+    with sync_playwright() as p:
+        # Connection to Chromium
+        browser = p.chromium.launch(headless=False)
         
-        print(f"_"*50)
-        print(f"|", f" "*50, f"|")
-        print(f"|", f"-"*20, f"  {year_season}  ", f"-"*20, f"|")
-        print(f"|", f"_"*40, f"|")
+        for year_season in range(year_range[0], year_range[1] + 1):
+            print(f"{'_'*50}")
+            print(f"|{' '*50}|")
+            print(f"|{'-'*20}  {year_season}  {'-'*20}|")
+            print(f"|{'_'*40}|")
 
-
-        with sync_playwright() as p :
-
-            # Connection to Chromium :
-            browser = p.chromium.launch(headless=False) #.connect_over_cdp(SBR_WS_CDP) #.launch(headless=False)
-
-            # Parametrisation :
+            # Parametrisation
             url_year_season = f"https://www.atptour.com/en/scores/results-archive?tournamentType=atpgs&year={year_season}"
 
-
-            # extract_tournament_link :
+            # Extract tournament links
             list_tournament_link = extract_tournament_link(browser=browser, url=url_year_season)
-            print("extract_tournament_link OK")
+            print(f"Year {year_season}: extract_tournament_link OK")
 
 
             #todo (temp) :
             list_tournament_link = list_tournament_link[:2]
-            # print(list_tournament_link)
+            print(list_tournament_link)
 
 
-            # extract tournament_info + matches_link :
+            # Extract tournament info + matches link
             list_match_link_per_tournament = []
-            for tournament_link in list_tournament_link : 
-                list_match_link_per_tournament.append(extract_matches_link(browser=browser, url=f"https://www.atptour.com{tournament_link}"))
-                # time.sleep(3)
-            print("extract tournament_info + matches_link OK")
+            for tournament_link in list_tournament_link:
+                list_match_link_per_tournament.append(
+                    extract_matches_link(browser=browser, url=f"https://www.atptour.com{tournament_link}")
+                )
+            print(f"Year {year_season}: extract tournament_info + matches_link OK")
 
-
-            # extract_match_stats :
+            # Extract match stats
             dict_match_stats = {}
             dict_missing_match_stat = {}
 
-            for dict_tournament in list_match_link_per_tournament :
+            for dict_tournament in list_match_link_per_tournament:
                 tournament_name = list(dict_tournament.keys())[0]
                 dict_match_stats[tournament_name] = [dict_tournament[tournament_name][0]]
                 dict_missing_match_stat[tournament_name] = []
 
-                for match_link in tqdm(dict_tournament[tournament_name][1]) :
-                    dict_extract_match_stats = extract_match_stats(browser=browser, url=f"https://www.atptour.com{match_link}")
-                    dict_match_stats[tournament_name].append({f"{match_link.split("/")[-1]}" : dict_extract_match_stats})
+                for match_link in tqdm(dict_tournament[tournament_name][1]):
+                    dict_extract_match_stats = extract_match_stats(
+                        browser=browser, 
+                        url=f"https://www.atptour.com{match_link}"
+                    )
+                    dict_match_stats[tournament_name].append(
+                        {f"{match_link.split('/')[-1]}": dict_extract_match_stats}
+                    )
                     
-                    if dict_extract_match_stats["var_untracked_match_link"] != "None" :
-                        dict_missing_match_stat[tournament_name].append(dict_extract_match_stats["var_untracked_match_link"])
-                    else :
-                        pass
+                    if dict_extract_match_stats["var_untracked_match_link"] != "None":
+                        dict_missing_match_stat[tournament_name].append(
+                            dict_extract_match_stats["var_untracked_match_link"]
+                        )
 
+            print(f"Year {year_season}: extract_match_stats OK")
 
-                    # time.sleep(4)
-            print("extract_match_stats OK")
+            # Save results
+            with open(f'./data/1_data_bronze/03_ATP_website/ATP_matches_archive/ATP_match_archive_{year_season}.txt', 'w') as f:
+                f.write(str(dict_match_stats))
+            
+            with open(f'./data/1_data_bronze/03_ATP_website/ATP_matches_archive/ATP_match_archive_missing_stat_{year_season}.txt', 'w') as f:
+                f.write(str(dict_missing_match_stat))
 
-
-
-            # Update ATP_match_archive_{year_season}.txt :
-            with open(f'./data/1_data_bronze/03_ATP_website/ATP_matches_archive/ATP_match_archive_{year_season}.txt', 'w') as ATP_match_archive_file:
-                ATP_match_archive_file.write(str(dict_match_stats))
-        
-            # Update ATP_match_archive_missing_stat_{year_season}.txt :
-            with open(f'./data/1_data_bronze/03_ATP_website/ATP_matches_archive/ATP_match_archive_missing_stat_{year_season}.txt', 'w') as ATP_match_archive_missing_stat_file:
-                ATP_match_archive_missing_stat_file.write(str(dict_missing_match_stat))
+        browser.close()
+    
+    duration = (time.time() - start_time) / 60
+    print(f"Time taken for years {year_range[0]}-{year_range[1]}: {duration:.2f} minutes")
 
 
 
@@ -398,20 +408,22 @@ def main(SBR_WS_CDP, year_range=[2010, 2011]):
 
 
 if __name__ == "__main__":
-
-    # with open(f'./config/config_WS_ATP_match_archive.yaml', 'r') as config_file :
-    #     settings = yaml.safe_load(config_file)
-
-
-    # compute time running :
-    start_time = time.time()
+    # Define the year ranges to scrape
+    list_year_ranges = [
+        [2012, 2013],
+        [2014, 2015],
+        [2016, 2017]
+    ]
     
-    # run main :
-    main(SBR_WS_CDP=None, year_range=[2012, 2013])
-
-    # End the timer
-    end_time = time.time()
-
-    # Calculate and print the duration
-    duration = (end_time - start_time)/60
-    print(f"Time taken: {duration:.2f} minutes")
+    # Create processes for each year range
+    processes = []
+    for year_range in list_year_ranges:
+        p = multiprocessing.Process(target=scrape_years, args=(year_range,))
+        processes.append(p)
+        p.start()
+    
+    # Wait for all processes to complete
+    for p in processes:
+        p.join()
+    
+    print("All scraping processes completed!")
