@@ -50,8 +50,8 @@ def accept_cookie(page) :
         page.wait_for_selector('xpath=//a[@class="atp_button atp_button--invert atp_button--continue"]', timeout=20000)
         page.locator('xpath=//a[@class="atp_button atp_button--invert atp_button--continue"]').click()
     
-    except PlaywrightTimeoutError as e :
-        logging.error(f"Accept cookies button doesn't exist : {e}")
+    except PlaywrightTimeoutError :
+        #logging.error(f"Accept cookies button doesn't exist : {e}")
         pass
 
 
@@ -87,8 +87,6 @@ def extract_tournament_link(browser, url) :
 
 
 
-
-
 def extract_matches_link(browser, url):
     
     # Page 1 :
@@ -96,42 +94,55 @@ def extract_matches_link(browser, url):
 
     # accept cookies
     accept_cookie(page=page)
+        
+    try : 
+        # extract title and date :
+        title = page.locator('div.status-country > h3.title > a').text_content()
+        date = page.locator('div.date-location > span:last-child').text_content()
+
+        # extract list_match_link :
+        all_match_link_html = page.locator('div.match > div.match-footer > div.match-cta > a:text("Stats")').all()
+        list_match_link = []
+        for html_element in all_match_link_html:
+            match_link = html_element.get_attribute('href')
+            list_match_link.append(match_link)
+
+        # extract specific tournament_info :
+        tournament_info_url = page.locator('div.rotator-content > div.rotator-next > a').get_attribute('href')
     
-    # extract title and date :
-    title = page.locator('div.status-country > h3.title > a').text_content()
-    date = page.locator('div.date-location > span:last-child').text_content()
+    except :
+        title = url
+        date = "None"
+        list_match_link = []
+        tournament_info_url = "None"
+        logging.error(f"BUG. No tournament info (extract_matches_link) : {url}")
 
-    # extract list_match_link :
-    all_match_link_html = page.locator('div.match > div.match-footer > div.match-cta > a:text("Stats")').all()
-    list_match_link = []
-    for html_element in all_match_link_html:
-        match_link = html_element.get_attribute('href')
-        list_match_link.append(match_link)
-
-    # extract specific tournament_info :
-    tournament_info_url = page.locator('div.rotator-content > div.rotator-next > a').get_attribute('href')
     page.close()
 
     
     # Page 2 :
-    page_2 = try_except_page_goto(browser=browser, url=f"https://www.atptour.com{tournament_info_url}")
+    if tournament_info_url != "None":
+        page_2 = try_except_page_goto(browser=browser, url=f"https://www.atptour.com{tournament_info_url}")
 
-    # accept_cookies :
-    accept_cookie(page=page_2)
-    
-    # extract tournament location and surface : 
-    try : 
-        location = page_2.locator('ul.td_right > li:has(span:text-is("Location")) > span:last-child').text_content()
-        surface = page_2.locator('ul.td_left > li:has(span:text-is("Surface")) > span:last-child').text_content()
-    except : 
+        # accept_cookies :
+        accept_cookie(page=page_2)
+        
+        # extract tournament location and surface : 
+        try : 
+            location = page_2.locator('ul.td_right > li:has(span:text-is("Location")) > span:last-child').text_content()
+            surface = page_2.locator('ul.td_left > li:has(span:text-is("Surface")) > span:last-child').text_content()
+        except : 
+            location = "None"
+            surface = "None"
+        
+        page_2.close()
+
+    else :
         location = "None"
         surface = "None"
 
-    page_2.close()
-    
 
     return {f"{title}" : [{"date" : date, "location" : location, "surface" : surface} , list_match_link]}
-
 
 
 
@@ -258,7 +269,7 @@ def extract_match_stats(browser, url) :
         return_pts_won_p2="None"
         total_point_won_p2="None"
 
-        logging.error(f"BUG. No match stat : {url}")
+        logging.error(f"BUG. No match stat (extract_match_stats) : {url}")
 
 
     # close page :
@@ -350,9 +361,9 @@ def scrape_years(year_range):
             print(f"Year {year_season}: extract_tournament_link OK")
 
 
-            #todo (temp) :
-            list_tournament_link = list_tournament_link[:2]
-            print(list_tournament_link)
+            # #todo (temp) :
+            # list_tournament_link = list_tournament_link[:2]
+            # print(list_tournament_link)
 
 
             # Extract tournament info + matches link

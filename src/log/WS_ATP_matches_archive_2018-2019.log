@@ -1,1 +1,14 @@
-23-11-2024 | 18:44:34 - DEBUG - Using proactor: IocpProactor
+24-11-2024 | 13:09:32 - DEBUG - Using proactor: IocpProactor
+24-11-2024 | 13:41:53 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/580/qs096
+24-11-2024 | 13:43:19 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/580/qs099
+24-11-2024 | 16:03:02 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/540/ms005
+24-11-2024 | 16:12:17 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/540/ms111
+24-11-2024 | 17:48:24 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/5014/ms057
+24-11-2024 | 17:49:55 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/5014/ms033
+24-11-2024 | 17:51:27 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/5014/ms050
+24-11-2024 | 17:53:02 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/5014/ms038
+24-11-2024 | 17:54:50 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/5014/qs009
+24-11-2024 | 17:56:14 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/5014/qs011
+24-11-2024 | 17:57:46 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/5014/qs013
+24-11-2024 | 17:59:29 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/5014/qs014
+24-11-2024 | 17:59:58 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/5014/qs008
