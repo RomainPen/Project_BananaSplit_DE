@@ -19,10 +19,10 @@ def measure_network_usage():
         # 1. First page - Archive page for a specific year
         page_1 = browser.new_page()
         print("\n1 : Loading season of 2010")
-        before_load = psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
+        before_load = psutil.net_io_counters().bytes_recv + psutil.net_io_counters().bytes_sent
         page_1.goto('https://www.atptour.com/en/scores/results-archive?tournamentType=atpgs&year=2010')
         time.sleep(5)  # Wait for all content to load
-        after_load = psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
+        after_load = psutil.net_io_counters().bytes_recv + psutil.net_io_counters().bytes_sent
         page_load_bytes_1 = after_load - before_load
         print(f"Loading season 2010 load used: {format_bytes(page_load_bytes_1)}")
         page_1.close()
@@ -31,10 +31,10 @@ def measure_network_usage():
         # 2. Tournament page (sample)
         page_2 = browser.new_page()
         print("\n2 : Loading 1 tournament page of 2010")
-        before_load = psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
+        before_load = psutil.net_io_counters().bytes_recv + psutil.net_io_counters().bytes_sent
         page_2.goto('https://www.atptour.com/en/scores/archive/brisbane/339/2010/results')
         time.sleep(5)  # Wait for all content to load
-        after_load = psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
+        after_load = psutil.net_io_counters().bytes_recv + psutil.net_io_counters().bytes_sent
         page_load_bytes_2 = after_load - before_load
         print(f"Loading 1 tournament page of 2010 load used: {format_bytes(page_load_bytes_2)}")
         page_2.close()
@@ -43,14 +43,19 @@ def measure_network_usage():
         # 3. match page (sample)
         page_3 = browser.new_page()
         print("\n3 : Loading 1 match page of 2010")
-        before_load = psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
+        before_load = psutil.net_io_counters().bytes_recv + psutil.net_io_counters().bytes_sent
         page_3.goto('https://www.atptour.com/en/scores/results-archive?tournamentType=atpgs&year=2010')
         time.sleep(5)  # Wait for all content to load
-        after_load = psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
+        after_load = psutil.net_io_counters().bytes_recv + psutil.net_io_counters().bytes_sent
         page_load_bytes_3 = after_load - before_load
         print(f"Loading 1 match page of 2010 load used: {format_bytes(page_load_bytes_3)}")
         page_3.close()
-        
+    
+
+
+    
+    sum_date_recv = (page_load_bytes_1 + page_load_bytes_2 + page_load_bytes_3)
+    print(f"\nsummary for one request : {format_bytes(sum_date_recv)}")
         
         
     print("\nNetwork Usage Summary:")

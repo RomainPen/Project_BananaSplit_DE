@@ -171,7 +171,51 @@ def extract_match_stats(browser, url) :
         country_p1 = page.locator('div.player-team > div.names > div.name > span.country').text_content()
         country_p2 = page.locator('div.opponent-team > div.names > div.name > span.country').text_content()
 
+
+        # playing time :
+        playing_time = page.locator('div.match > div.match-header > span:last-child').text_content()
+
+
+        # extract match score :
+        player1_sets = []
+        player1_tiebreaks = []
+        player2_sets = []
+        player2_tiebreaks = []
+
+        # PLayer_1 :
+        for item in page.locator('div.stats-item:first-child div.scores > div.score-item').all():
+            scores = item.locator('span').all()
+            if len(scores) == 1:
+                # Set normal sans tie-break
+                player1_sets.append(scores[0].text_content())
+                player1_tiebreaks.append(None)
+            elif len(scores) == 2:
+                # Set avec tie-break
+                player1_sets.append(scores[0].text_content())
+                player1_tiebreaks.append(scores[1].text_content())
+
+        # Player_2 :
+        for item in page.locator('div.stats-item:last-child div.scores > div.score-item').all():
+            scores = item.locator('span').all()
+            if len(scores) == 1:
+                # Set normal sans tie-break
+                player2_sets.append(scores[0].text_content())
+                player2_tiebreaks.append(None)
+            elif len(scores) == 2:
+                # Set avec tie-break
+                player2_sets.append(scores[0].text_content())
+                player2_tiebreaks.append(scores[1].text_content())
+
+        # append all score in dict_match_score :
+        dict_match_score = {}
+        for i in range(len(player1_sets)):
+            set_num = i + 1
+            dict_match_score[f"set_{set_num}"] = {"player_1" : f"{player1_sets[i]} ({player1_tiebreaks[i]})", 
+                                                "player_2" : f"{player2_sets[i]} ({player2_tiebreaks[i]})", 
+                                                }        
+
         
+
         # service_stat : 
         serve_rating_p1 = page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .player-stats-item div.value').text_content()
         aces_p1 = page.locator('li:has(div.stats-item-legend:text-is("Aces")) .player-stats-item div.value').text_content()
@@ -226,7 +270,12 @@ def extract_match_stats(browser, url) :
         country_p1 = "None"
         country_p2 = "None"
 
-        
+        # playing time :
+        playing_time = "None"
+
+        # extract match score : 
+        dict_match_score="None"
+
         # service_stat : 
         serve_rating_p1 = "None"
         aces_p1 = "None"
@@ -285,6 +334,9 @@ def extract_match_stats(browser, url) :
             "player_2" : player_2, 
             "country_p1" : country_p1,
             "country_p2" : country_p2,
+
+            "playing_time": playing_time,
+            "dict_match_score":dict_match_score,
             
             "serve_rating_p1" : serve_rating_p1,
             "aces_p1" : aces_p1,
