@@ -1,0 +1,16 @@
+30-11-2024 | 11:35:30 - DEBUG - Using proactor: IocpProactor
+30-11-2024 | 12:25:13 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2016/580/ms125
+30-11-2024 | 14:04:53 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2016/717/qs013
+30-11-2024 | 14:55:02 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2016/416/ms023
+30-11-2024 | 17:21:46 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2016/7480/ms004
+30-11-2024 | 18:09:06 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2016/568/qs011
+30-11-2024 | 18:27:50 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2016/747/qs011
+30-11-2024 | 19:48:01 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2017/301/ms007
+30-11-2024 | 20:45:50 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2017/6932/qs005
+30-11-2024 | 20:46:31 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2017/6932/qs010
+30-11-2024 | 21:40:34 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2017/717/ms029
+30-11-2024 | 23:01:44 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2017/520/qs083
+01-12-2024 | 05:44:17 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/7694/qs005
+01-12-2024 | 07:12:19 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/6116/ms006
+01-12-2024 | 07:32:40 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/319/qs010
+01-12-2024 | 09:03:27 - ERROR - BUG. No match stat (extract_match_stats) : https://www.atptour.com/en/scores/match-stats/archive/2018/7696/ms000
