@@ -16,8 +16,11 @@ def main():
     with sync_playwright() as p :
         browser = p.chromium.launch(headless=False)
 
+        # SBR_WS_CDP = "wss://brd-customer-hl_afb68bf9-zone-scraping_browser_atp_matches_2:xl9eql8mb6r1@brd.superproxy.io:9222"
+        # browser = p.chromium.connect_over_cdp(SBR_WS_CDP) 
+
         # open page :
-        url = "https://www.atptour.com/en/scores/match-stats/archive/2010/580/ms005"
+        url = "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms011"
         page = browser.new_page()
         page.goto(url)
 
@@ -90,8 +93,13 @@ def main():
         country_p1 = page.locator('div.player-team > div.names > div.name > span.country').text_content()
         country_p2 = page.locator('div.opponent-team > div.names > div.name > span.country').text_content()
 
-        service_rate_p1 = page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .player-stats-item div.value').text_content()
-        service_rate_p2 = page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .opponent-stats-item div.value').text_content()
+        # service_rate_p1 = page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .player-stats-item div.value').text_content()
+        # service_rate_p2 = page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .opponent-stats-item div.value').text_content()
+
+
+
+        service_rate_p1 = page.locator('div.desktopView:has(.labelBold:text("Aces")) .player1.non-speed span').text_content()
+        service_rate_p2 = page.locator('div.desktopView:has(.labelBold:text("Aces")) .player2.non-speed span').text_content()
 
         print("--------------------")
         print(f"serv_rate_p1 : {service_rate_p1}")

@@ -217,23 +217,23 @@ def extract_match_stats(browser, url) :
         
 
         # service_stat : 
-        serve_rating_p1 = page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .player-stats-item div.value').text_content()
-        aces_p1 = page.locator('li:has(div.stats-item-legend:text-is("Aces")) .player-stats-item div.value').text_content()
-        double_faults_p1 =page.locator('li:has(div.stats-item-legend:text-is("Double Faults")) .player-stats-item div.value').text_content()
-        first_serve_p1 =page.locator('li:has(div.stats-item-legend:text-is("1st Serve")) .player-stats-item div.value').text_content()
-        first_serve_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("1st Serve Points Won")) .player-stats-item div.value').text_content()
-        second_serve_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Points Won")) .player-stats-item div.value').text_content()
-        break_pts_saved_p1 =page.locator('li:has(div.stats-item-legend:text-is("Break Points Saved")) .player-stats-item div.value').text_content()
-        service_game_played_p1 = page.locator('li:has(div.stats-item-legend:text-is("Service Games Played")) .player-stats-item div.value').text_content()
+        serve_rating_p1 = page.locator('l').text_content()
+        aces_p1 = page.locator('div.desktopView:has(.labelBold:text("Aces")) .player1.non-speed span').text_content()
+        double_faults_p1 =page.locator('ue').text_content()
+        first_serve_p1 =page.locator('li:has(div.stat').text_content()
+        first_serve_pts_won_p1 =page.locator('li:has(divalue').text_content()
+        second_serve_pts_won_p1 =page.locator('li:has(tats-item div.value').text_content()
+        break_pts_saved_p1 =page.locator('li:has(div.sta .player-stats-item div.value').text_content()
+        service_game_played_p1 = page.locator('li:has(divetats-item div.value').text_content()
 
-        serve_rating_p2= page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .opponent-stats-item div.value').text_content()
-        aces_p2= page.locator('li:has(div.stats-item-legend:text-is("Aces")) .opponent-stats-item div.value').text_content()
-        double_faults_p2=page.locator('li:has(div.stats-item-legend:text-is("Double Faults")) .opponent-stats-item div.value').text_content()
-        first_serve_p2=page.locator('li:has(div.stats-item-legend:text-is("1st Serve")) .opponent-stats-item div.value').text_content()
-        first_serve_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("1st Serve Points Won")) .opponent-stats-item div.value').text_content()
-        second_serve_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Points Won")) .opponent-stats-item div.value').text_content()
-        break_pts_saved_p2 =page.locator('li:has(div.stats-item-legend:text-is("Break Points Saved")) .opponent-stats-item div.value').text_content()
-        service_game_played_p2=page.locator('li:has(div.stats-item-legend:text-is("Service Games Played")) .opponent-stats-item div.value').text_content()
+        serve_rating_p2= page.locator('li:has(div.siv.value').text_content()
+        aces_p2= page.locator('div.desktopView:has(.labelBold:text("Aces")) .player1.non-speed span').text_content()
+        double_faults_p2=page.locator('li:has div.value').text_content()
+        first_serve_p2=page.locator('li:has(dvalue').text_content()
+        first_serve_pts_won_p2=page.locator('li:has(div div.value').text_content()
+        second_serve_pts_won_p2=page.locator('li:has(div.st.value').text_content()
+        break_pts_saved_p2 =page.locator('li:has(div.value').text_content()
+        service_game_played_p2=page.locator('li:has(div.em div.value').text_content()
 
 
         #return_stat :
