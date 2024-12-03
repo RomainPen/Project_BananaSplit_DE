@@ -31,11 +31,9 @@ def main():
 
 
 
+
         playing_time = page.locator('div.match > div.match-header > span:last-child').text_content()
         print(playing_time)
-
-
-
 
 
 
@@ -84,36 +82,12 @@ def main():
         #########################################################
 
 
-
-
-
+        #########################################################
         # extract stat :
         player_1 = page.locator('div.player-team > div.names > div.name > a').text_content()
         player_2 = page.locator('div.opponent-team > div.names > div.name > a').text_content()
         country_p1 = page.locator('div.player-team > div.names > div.name > span.country').text_content()
         country_p2 = page.locator('div.opponent-team > div.names > div.name > span.country').text_content()
-
-        # service_rate_p1 = page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .player-stats-item div.value').text_content()
-        # service_rate_p2 = page.locator('li:has(div.stats-item-legend:text-is("Serve Rating")) .opponent-stats-item div.value').text_content()
-
-
-
-        service_rate_p1 = page.locator('div.desktopView:has(.labelBold:text("Aces")) .player1.non-speed span').text_content()
-        service_rate_p2 = page.locator('div.desktopView:has(.labelBold:text("Aces")) .player2.non-speed span').text_content()
-
-        print("--------------------")
-        print(f"serv_rate_p1 : {service_rate_p1}")
-        print(f"serv_rate_p2 : {service_rate_p2}")
-        print("--------------------")
-
-
-
-
-
-
-
-        # close page :
-        page.close()
 
         # stat in dict_stat :
         dict_stat = {"player_1" : player_1,
@@ -123,6 +97,160 @@ def main():
         
         # print dict_stat :
         print(dict_stat)
+       #########################################################
+
+
+
+
+
+
+
+
+
+        # serve :
+        service_rate_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Serve Rating")) .player1.non-speed a').text_content()
+        service_rate_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Serve Rating")) .player2.non-speed a').text_content()
+        print("--------------------")
+        print(f"serv_rate_p1 : {service_rate_p1}")
+        print(f"serv_rate_p2 : {service_rate_p2}")
+        print("--------------------")
+
+
+        ace_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Aces")) .player1.non-speed span').text_content()
+        ace_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Aces")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"ace_p1 : {ace_p1}")
+        print(f"ace_p2 : {ace_p2}")
+        print("--------------------")
+
+
+        df_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Double Faults")) .player1.non-speed span').text_content()
+        df_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Double Faults")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"df_p1 : {df_p1}")
+        print(f"df_p2 : {df_p2}")
+        print("--------------------")
+
+
+        fs_p1 = page.locator('div.desktopView:has(.labelBold:text-is("First serve")) .player1.non-speed span').text_content()
+        fs_p2 = page.locator('div.desktopView:has(.labelBold:text-is("First serve")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"fs_p1 : {fs_p1}")
+        print(f"fs_p2 : {fs_p2}")
+        print("--------------------")
+
+
+        fs_pw_p1 = page.locator('div.desktopView:has(.labelBold:text-is("1st serve points won")) .player1.non-speed span').text_content()
+        fs_pw_p2 = page.locator('div.desktopView:has(.labelBold:text-is("1st serve points won")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"fs_pw_p1 : {fs_pw_p1}")
+        print(f"fs_pw_p2 : {fs_pw_p2}")
+        print("--------------------")
+
+
+        ss_pw_p1 = page.locator('div.desktopView:has(.labelBold:text-is("2nd serve points won")) .player1.non-speed span').text_content()
+        ss_pw_p2 = page.locator('div.desktopView:has(.labelBold:text-is("2nd serve points won")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"ss_pw_p1 : {ss_pw_p1}")
+        print(f"ss_pw_p2 : {ss_pw_p2}")
+        print("--------------------")
+
+
+        bps_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Break Points Saved")) .player1.non-speed span').text_content()
+        bps_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Break Points Saved")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"bps_p1 : {bps_p1}")
+        print(f"bps_p2 : {bps_p2}")
+        print("--------------------")
+
+
+        sgp_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Service Games Played")) .player1.non-speed span').text_content()
+        sgp_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Service Games Played")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"sgp_p1 : {sgp_p1}")
+        print(f"sgp_p2 : {sgp_p2}")
+        print("--------------------")
+
+
+
+
+
+
+
+        #return_stat :
+        rr_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Return Rating")) .player1.non-speed a').text_content()
+        rr_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Return Rating")) .player2.non-speed a').text_content()
+        print("--------------------")
+        print(f"rr_p1 : {rr_p1}")
+        print(f"rr_p2 : {rr_p2}")
+        print("--------------------")
+
+
+        fs_rpw_p1 = page.locator('div.desktopView:has(.labelBold:text-is("1st Serve Return Points Won")) .player1.non-speed span').text_content()
+        fs_rpw_p2 = page.locator('div.desktopView:has(.labelBold:text-is("1st Serve Return Points Won")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"fs_rpw_p1 : {fs_rpw_p1}")
+        print(f"fs_rpw_p2 : {fs_rpw_p2}")
+        print("--------------------")
+
+
+        ss_rpw_p1 = page.locator('div.desktopView:has(.labelBold:text-is("2nd Serve Return Points Won")) .player1.non-speed span').text_content()
+        ss_rpw_p2 = page.locator('div.desktopView:has(.labelBold:text-is("2nd Serve Return Points Won")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"ss_rpw_p1 : {ss_rpw_p1}")
+        print(f"ss_rpw_p2 : {ss_rpw_p2}")
+        print("--------------------")
+
+
+        bpc_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Break Points Converted")) .player1.non-speed span').text_content()
+        bpc_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Break Points Converted")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"bpc_p1 : {bpc_p1}")
+        print(f"bpc_p2 : {bpc_p2}")
+        print("--------------------")
+
+
+        rgp_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Return Games Played")) .player1.non-speed span').text_content()
+        rgp_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Return Games Played")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"rgp_p1 : {rgp_p1}")
+        print(f"rgp_p2 : {rgp_p2}")
+        print("--------------------")
+
+
+    
+
+
+        # pts stat :
+        spw_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Service Points Won")) .player1.non-speed span').text_content()
+        spw_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Service Points Won")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"spw_p1 : {spw_p1}")
+        print(f"spw_p2 : {spw_p2}")
+        print("--------------------")
+
+
+        rpw_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Return Points Won")) .player1.non-speed span').text_content()
+        rpw_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Return Points Won")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"rpw_p1 : {rpw_p1}")
+        print(f"rpw_p2 : {rpw_p2}")
+        print("--------------------")
+
+
+        tpw_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Total Points Won")) .player1.non-speed span').text_content()
+        tpw_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Total Points Won")) .player2.non-speed span').text_content()
+        print("--------------------")
+        print(f"tpw_p1 : {tpw_p1}")
+        print(f"tpw_p2 : {tpw_p2}")
+        print("--------------------")
+
+
+
+
+
+        # close page :
+        page.close()
 
 
 

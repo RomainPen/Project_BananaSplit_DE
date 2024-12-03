@@ -28,19 +28,21 @@ def setup_logging(year_range):
 
 ############################################ Common functions : #####################################################
 def try_except_page_goto(browser, url) :
-    # open page :
-        try :
-            page = browser.new_page()
-            page.goto(url, timeout=60000)
-        except :
-            page.close()
-            time.sleep(10)
-            page = browser.new_page()
-            time.sleep(5)
-            page.goto(url, timeout=60000)
-            time.sleep(10)
+    time.sleep(10)
 
-        return page
+    # open page :
+    try :
+        page = browser.new_page()
+        page.goto(url, timeout=60000)
+    except :
+        page.close()
+        time.sleep(10)
+        page = browser.new_page()
+        time.sleep(5)
+        page.goto(url, timeout=60000)
+        time.sleep(10)
+
+    return page
 
 
 
@@ -217,47 +219,47 @@ def extract_match_stats(browser, url) :
         
 
         # service_stat : 
-        serve_rating_p1 = page.locator('l').text_content()
+        serve_rating_p1 = page.locator('div.desktopView:has(.labelBold:text("Serve Rating")) .player1.non-speed a').text_content()
         aces_p1 = page.locator('div.desktopView:has(.labelBold:text("Aces")) .player1.non-speed span').text_content()
-        double_faults_p1 =page.locator('ue').text_content()
-        first_serve_p1 =page.locator('li:has(div.stat').text_content()
-        first_serve_pts_won_p1 =page.locator('li:has(divalue').text_content()
-        second_serve_pts_won_p1 =page.locator('li:has(tats-item div.value').text_content()
-        break_pts_saved_p1 =page.locator('li:has(div.sta .player-stats-item div.value').text_content()
-        service_game_played_p1 = page.locator('li:has(divetats-item div.value').text_content()
+        double_faults_p1 =page.locator('div.desktopView:has(.labelBold:text-is("Double Faults")) .player1.non-speed span').text_content()
+        first_serve_p1 =page.locator('div.desktopView:has(.labelBold:text-is("First serve")) .player1.non-speed span').text_content()
+        first_serve_pts_won_p1 =page.locator('div.desktopView:has(.labelBold:text-is("1st serve points won")) .player1.non-speed span').text_content()
+        second_serve_pts_won_p1 =page.locator('div.desktopView:has(.labelBold:text-is("2nd serve points won")) .player1.non-speed span').text_content()
+        break_pts_saved_p1 =page.locator('div.desktopView:has(.labelBold:text-is("Break Points Saved")) .player1.non-speed span').text_content()
+        service_game_played_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Service Games Played")) .player1.non-speed span').text_content()
 
-        serve_rating_p2= page.locator('li:has(div.siv.value').text_content()
-        aces_p2= page.locator('div.desktopView:has(.labelBold:text("Aces")) .player1.non-speed span').text_content()
-        double_faults_p2=page.locator('li:has div.value').text_content()
-        first_serve_p2=page.locator('li:has(dvalue').text_content()
-        first_serve_pts_won_p2=page.locator('li:has(div div.value').text_content()
-        second_serve_pts_won_p2=page.locator('li:has(div.st.value').text_content()
-        break_pts_saved_p2 =page.locator('li:has(div.value').text_content()
-        service_game_played_p2=page.locator('li:has(div.em div.value').text_content()
+        serve_rating_p2= page.locator('div.desktopView:has(.labelBold:text("Serve Rating")) .player2.non-speed a').text_content()
+        aces_p2= page.locator('div.desktopView:has(.labelBold:text("Aces")) .player2.non-speed span').text_content()
+        double_faults_p2=page.locator('div.desktopView:has(.labelBold:text-is("Double Faults")) .player2.non-speed span').text_content()
+        first_serve_p2=page.locator('div.desktopView:has(.labelBold:text-is("First serve")) .player2.non-speed span').text_content()
+        first_serve_pts_won_p2=page.locator('div.desktopView:has(.labelBold:text-is("1st serve points won")) .player2.non-speed span').text_content()
+        second_serve_pts_won_p2=page.locator('div.desktopView:has(.labelBold:text-is("2nd serve points won")) .player2.non-speed span').text_content()
+        break_pts_saved_p2 =page.locator('div.desktopView:has(.labelBold:text-is("Break Points Saved")) .player2.non-speed span').text_content()
+        service_game_played_p2=page.locator('div.desktopView:has(.labelBold:text-is("Service Games Played")) .player2.non-speed span').text_content()
 
 
         #return_stat :
-        return_rating_p1 = page.locator('li:has(div.stats-item-legend:text-is("Return Rating")) .player-stats-item div.value').text_content()
-        first_serve_return_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("1st Serve Return Points Won")) .player-stats-item div.value').text_content()
-        second_serve_return_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Return Points Won")) .player-stats-item div.value').text_content()
-        break_pts_converted_p1 = page.locator('li:has(div.stats-item-legend:text-is("Break Points Converted")) .player-stats-item div.value').text_content()
-        return_games_played_p1 =page.locator('li:has(div.stats-item-legend:text-is("Return Games Played")) .player-stats-item div.value').text_content()
+        return_rating_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Return Rating")) .player1.non-speed a').text_content()
+        first_serve_return_pts_won_p1 =page.locator('div.desktopView:has(.labelBold:text-is("1st Serve Return Points Won")) .player1.non-speed span').text_content()
+        second_serve_return_pts_won_p1 =page.locator('div.desktopView:has(.labelBold:text-is("2nd Serve Return Points Won")) .player1.non-speed span').text_content()
+        break_pts_converted_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Break Points Converted")) .player1.non-speed span').text_content()
+        return_games_played_p1 =page.locator('div.desktopView:has(.labelBold:text-is("Return Games Played")) .player1.non-speed span').text_content()
 
-        return_rating_p2= page.locator('li:has(div.stats-item-legend:text-is("Return Rating")) .opponent-stats-item div.value').text_content()
-        first_serve_return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("1st Serve Return Points Won")) .opponent-stats-item div.value').text_content()
-        second_serve_return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("2nd Serve Return Points Won")) .opponent-stats-item div.value').text_content()
-        break_pts_converted_p2= page.locator('li:has(div.stats-item-legend:text-is("Break Points Converted")) .opponent-stats-item div.value').text_content()
-        return_games_played_p2=page.locator('li:has(div.stats-item-legend:text-is("Return Games Played")) .opponent-stats-item div.value').text_content()
+        return_rating_p2= page.locator('div.desktopView:has(.labelBold:text-is("Return Rating")) .player2.non-speed a').text_content()
+        first_serve_return_pts_won_p2=page.locator('div.desktopView:has(.labelBold:text-is("1st Serve Return Points Won")) .player2.non-speed span').text_content()
+        second_serve_return_pts_won_p2=page.locator('div.desktopView:has(.labelBold:text-is("2nd Serve Return Points Won")) .player2.non-speed span').text_content()
+        break_pts_converted_p2= page.locator('div.desktopView:has(.labelBold:text-is("Break Points Converted")) .player2.non-speed span').text_content()
+        return_games_played_p2=page.locator('div.desktopView:has(.labelBold:text-is("Return Games Played")) .player2.non-speed span').text_content()
         
         
         #pts_stats :
-        service_pts_won_p1 = page.locator('li:has(div.stats-item-legend:text-is("Service Points Won")) .player-stats-item div.value').text_content()
-        return_pts_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("Return Points Won")) .player-stats-item div.value').text_content()
-        total_point_won_p1 =page.locator('li:has(div.stats-item-legend:text-is("Total Points Won")) .player-stats-item div.value').text_content()
+        service_pts_won_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Service Points Won")) .player1.non-speed span').text_content()
+        return_pts_won_p1 =page.locator('div.desktopView:has(.labelBold:text-is("Return Points Won")) .player1.non-speed span').text_content()
+        total_point_won_p1 =page.locator('div.desktopView:has(.labelBold:text-is("Total Points Won")) .player1.non-speed span').text_content()
 
-        service_pts_won_p2= page.locator('li:has(div.stats-item-legend:text-is("Service Points Won")) .opponent-stats-item div.value').text_content()
-        return_pts_won_p2=page.locator('li:has(div.stats-item-legend:text-is("Return Points Won")) .opponent-stats-item div.value').text_content()
-        total_point_won_p2=page.locator('li:has(div.stats-item-legend:text-is("Total Points Won")) .opponent-stats-item div.value').text_content()
+        service_pts_won_p2= page.locator('div.desktopView:has(.labelBold:text-is("Service Points Won")) .player2.non-speed span').text_content()
+        return_pts_won_p2=page.locator('div.desktopView:has(.labelBold:text-is("Return Points Won")) .player2.non-speed span').text_content()
+        total_point_won_p2=page.locator('div.desktopView:has(.labelBold:text-is("Total Points Won")) .player2.non-speed span').text_content()
         
 
     except :
@@ -399,11 +401,11 @@ def scrape_years(year_range):
     
     with sync_playwright() as p:
         # Connection to Chromium
-        browser = p.chromium.launch(headless=False)
+        # browser = p.chromium.launch(headless=False)
 
         #connect to chromium 2 :
-        # SBR_WS_CDP = "wss://brd-customer-hl_afb68bf9-zone-scraping_browser_atp_matches_2:xl9eql8mb6r1@brd.superproxy.io:9222"
-        # browser = p.chromium.connect_over_cdp(SBR_WS_CDP) 
+        SBR_WS_CDP = "wss://brd-customer-hl_afb68bf9-zone-scraping_browser_atp_matches_2:xl9eql8mb6r1@brd.superproxy.io:9222"
+        browser = p.chromium.connect_over_cdp(SBR_WS_CDP) 
         
         for year_season in tqdm(range(year_range[0], year_range[1] + 1)):
             print(f"|{'-'*20}  {year_season}  {'-'*20}|")
