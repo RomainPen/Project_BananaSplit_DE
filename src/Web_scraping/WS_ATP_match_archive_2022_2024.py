@@ -28,7 +28,7 @@ def setup_logging(year_range):
 
 ############################################ Common functions : #####################################################
 def try_except_page_goto(browser, url) :
-    time.sleep(10)
+    # time.sleep(10)
 
     # open page :
     try :
@@ -401,11 +401,11 @@ def scrape_years(year_range):
     
     with sync_playwright() as p:
         # Connection to Chromium
-        # browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=False)
 
         #connect to chromium 2 :
-        SBR_WS_CDP = "wss://brd-customer-hl_afb68bf9-zone-scraping_browser_atp_matches_2:xl9eql8mb6r1@brd.superproxy.io:9222"
-        browser = p.chromium.connect_over_cdp(SBR_WS_CDP) 
+        # SBR_WS_CDP = "wss://brd-customer-hl_afb68bf9-zone-scraping_browser_atp_matches_2-country-fr:xl9eql8mb6r1@brd.superproxy.io:9222"
+        # browser = p.chromium.connect_over_cdp(SBR_WS_CDP) 
         
         for year_season in tqdm(range(year_range[0], year_range[1] + 1)):
             print(f"|{'-'*20}  {year_season}  {'-'*20}|")
@@ -481,9 +481,9 @@ if __name__ == "__main__":
     # Define the year ranges to scrape
     
     list_year_ranges = [
-                        [2022, 2024]
-                        # [2023, 2023],
-                        # [2024, 2024]
+                        [2022, 2022],
+                        [2023, 2023],
+                        [2024, 2024]
                         ]
     
     # [

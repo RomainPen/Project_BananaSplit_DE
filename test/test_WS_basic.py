@@ -16,32 +16,20 @@ def main():
     with sync_playwright() as p :
         
         #connect to chromium 1 :
-        # browser = p.chromium.launch(headless=False)
-
-        # #connect to chromium 2 :
         browser = p.chromium.launch(headless=False)
 
-        #connect to chromium 3 :
-        # AUTH = 'brd-customer-hl_afb68bf9-zone-web_unlocker2:2anns0i95xxq'
-        # SBR_WS_CDP = f'wss://{AUTH}@brd.superproxy.io:9222'
-        # browser = p.chromium.connect_over_cdp(SBR_WS_CDP)
-
-
+        # tennis_matches_url :
         list_url = ["https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms011", "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms012", "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms021",
                     "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms011", "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms012", "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms021",
                     "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms011", "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms012", "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms021",
                     "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms011", "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms012", "https://www.atptour.com/en/scores/stats-centre/archive/2022/8888/ms021"]
         
 
-        # open page :
+        # open page : #########################################################################################
         a = 0
-        list_proxy = [
-                    'http://16.162.134.170:3128']
-        
         for url in list_url :
             print(f"-------------------------- MATCH {a} --------------------------------------")
 
-            ########################## test #####################################
             extra_http_headers = {'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
                                     'accept-encoding': 'gzip, deflate, br',
                                     'accept-language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
@@ -53,18 +41,10 @@ def main():
                                     'upgrade-insecure-requests': '1',
                                     'user-agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36'}
             
-            if a >= len(list_proxy)  :
-                a = 0
-            else :
-                pass
+            page = browser.new_page(extra_http_headers=extra_http_headers) 
+            page.goto(url, timeout=100000)
 
-            context = browser.new_context(proxy={"server":  list_proxy[a]}, extra_http_headers=extra_http_headers)
-            page = context.new_page()
-            #page = browser.new_page()
-            a+=1
-            page.goto(url, timeout=60000)
-            
-            ######################################################################
+
 
 
             # accept cookies
@@ -72,6 +52,10 @@ def main():
             page.locator('xpath=//a[@class="atp_button atp_button--invert atp_button--continue"]').click()
 
 
+
+
+
+            # Time play : ###############################################
             playing_time = page.locator('div.match > div.match-header > span:last-child').text_content()
             print(playing_time)
 
@@ -79,7 +63,7 @@ def main():
 
 
 
-            #########################################################
+            # Score : ################################################
             player1_sets = []
             player1_tiebreaks = []
             player2_sets = []
@@ -109,8 +93,6 @@ def main():
                     player2_sets.append(scores[0].text_content())
                     player2_tiebreaks.append(scores[1].text_content())
 
-
-            # Afficher les résultats
             dict_match_score = {}
             for i in range(len(player1_sets)):
                 set_num = i + 1
@@ -119,11 +101,12 @@ def main():
                                                     }
             
             print(dict_match_score)
-            #########################################################
 
 
-            #########################################################
-            # extract stat :
+
+
+            
+            # extract player info : ######################################################################
             player_1 = page.locator('div.player-team > div.names > div.name > a').text_content()
             player_2 = page.locator('div.opponent-team > div.names > div.name > a').text_content()
             country_p1 = page.locator('div.player-team > div.names > div.name > span.country').text_content()
@@ -137,16 +120,14 @@ def main():
             
             # print dict_stat :
             print(dict_stat)
-            #########################################################
+            
 
 
 
 
 
 
-
-
-
+            # Match stat : ##################################################################################
             # serve :
             service_rate_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Serve Rating")) .player1.non-speed a').text_content()
             service_rate_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Serve Rating")) .player2.non-speed a').text_content()
@@ -215,8 +196,6 @@ def main():
 
 
 
-
-
             #return_stat :
             rr_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Return Rating")) .player1.non-speed a').text_content()
             rr_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Return Rating")) .player2.non-speed a').text_content()
@@ -260,7 +239,6 @@ def main():
 
         
 
-
             # pts stat :
             spw_p1 = page.locator('div.desktopView:has(.labelBold:text-is("Service Points Won")) .player1.non-speed span').text_content()
             spw_p2 = page.locator('div.desktopView:has(.labelBold:text-is("Service Points Won")) .player2.non-speed span').text_content()
@@ -287,12 +265,20 @@ def main():
 
 
 
-
-
-            # close page :
+            # close page : ###########################################################
             page.close()
 
-            
+
+
+            # Change IP : ###############################################################
+            if (a % 3 == 0) and (a != 0) :
+                print("------------------------------- Change IP ------------------------------------")
+                time.sleep(15)
+            else :
+                pass
+
+            a+=1
+
 
 
 if __name__ == "__main__" :
