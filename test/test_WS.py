@@ -36,7 +36,10 @@ def main():
         # open page :
         a = 0
         list_proxy = [
-                    'http://16.162.134.170:3128']
+                     {
+        "server": 'http://brd.superproxy.io:33335',
+        "username": 'brd-customer-hl_afb68bf9-zone-datacenter_proxy1',
+        "password": 'l852zt8g84d4'}]
         
         for url in list_url :
             print(f"-------------------------- MATCH {a} --------------------------------------")
@@ -58,7 +61,7 @@ def main():
             else :
                 pass
 
-            context = browser.new_context(proxy={"server":  list_proxy[a]}, extra_http_headers=extra_http_headers)
+            context = browser.new_context(proxy=list_proxy[a])  #{"server":  list_proxy[a]}, extra_http_headers=extra_http_headers)
             page = context.new_page()
             #page = browser.new_page()
             a+=1

@@ -1,3 +1,6 @@
 BananaSplit_DE_env
 data
 config
+test/brightdata_proxy_ca
+test/ssl_certif.py
+test/test_temp.py
